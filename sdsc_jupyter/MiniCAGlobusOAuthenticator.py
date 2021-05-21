@@ -3,9 +3,10 @@ import subprocess
 from traitlets import Unicode
 from oauthenticator.globus import LocalGlobusOAuthenticator
 
-# to do
-# subclass GlobusOAuthenticator
-# overload pre_spawn_hook calls
+# To Do
+# Check "real" retrieval of user CA
+# Spawner: it should be able to pull the auth state
+# How to execute batch command over SSH? I.e., how to pass user CA?
 
 class MiniCAGlobusOAuthenticator(LocalGlobusOAuthenticator):
     mini_ca_scope = Unicode(

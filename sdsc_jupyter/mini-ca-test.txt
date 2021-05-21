@@ -1,0 +1,61 @@
+Lots of stuff went wrong on my side.  Something about Bright deciding
+the node needed to be rebuilt. Let's try again, hopefully before the
+node gets rebuilt.
+
+Okay, so recap:
+
+1) The response from shaka is a key + cert, cert is in last line.
+1a) Write the entire response to  ~/.ssh/tmpkey  set mode 600
+1b) Yank the last line from ~/.ssh/tmpkey, write to ~/.ssh/tmpkey-cert.pub
+
+2) Use the private key as the identity: ssh -i ~/.ssh/tmpkey
+rpwagner@kubrick-worker1.sdsc.edu
+2a) Your ssh client, if it is new enough, will send along the cert
+automatically, as long as it is in the right place.
+
+Note: the relationship of the private key and cert file name is very
+specific:
+certfile := <privkeyfile>-cert.pub
+
+
+
+(base) ITSC02C982DMD6M:jupyter-security-notes rpwagner$ !1690
+./gettoken.py https://auth.globus.org/scopes/3f8626f3-a43a-45a1-8408-46ff1e7662ab/shaka
+Ag3kBEJ142Bp1VJGwzxVzda9BbvEN94nlJJYPE3MNxv0MwoWmPuVCB4k9nr2Ba19gdVKy3GBYbbVbGHXQzNV5IrlXY
+
+(base) [ux455215@comet-ln3 ~]$ echo
+'Ag3kBEJ142Bp1VJGwzxVzda9BbvEN94nlJJYPE3MNxv0MwoWmPuVCB4k9nr2Ba19gdVKy3GBYbbVbGHXQzNV5IrlXY'
+| ssh -i ~/.ssh/jupyterdev_rsa sshca-idp-globus@shaka.sdsc.edu
+
+
+Token: 
+-----BEGIN OPENSSH PRIVATE KEY-----
+b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAAMwAAAAtzc2gtZW
+QyNTUxOQAAACA6mncefOk6iB1xIb54/5jgEHxY8XtB5N9a5dVqH8u9qAAAALCND4HtjQ+B
+7QAAAAtzc2gtZWQyNTUxOQAAACA6mncefOk6iB1xIb54/5jgEHxY8XtB5N9a5dVqH8u9qA
+AAAEBEXoqWEP2ddGmq7xrdNdoWP6T6qCcCKPMMWb1RITcBwzqadx586TqIHXEhvnj/mOAQ
+fFjxe0Hk31rl1Wofy72oAAAAKFNTSCBDQSBvbiBzaGFrYS5zZHNjLmVkdUAyMDIxMDQwMi
+0xNDUyNTEBAgMEBQ==
+-----END OPENSSH PRIVATE KEY-----
+ssh-ed25519-cert-v01@openssh.com AAAAIHNzaC1lZDI1NTE5LWNlcnQtdjAxQG9wZW5zc2guY29tAAAAIAFQRlcfxCtUIsxJc62KchHYovQUb3fV1zcGub8wkkLGAAAAIDqadx586TqIHXEhvnj/mOAQfFjxe0Hk31rl1Wofy72oAAAAAAAAAAAAAAABAAAAGFNTSCBDQSBvbiBzaGFrYS5zZHNjLmVkdQAAAAwAAAAIdXg0NTUyMTUAAAAAYGeRxAAAAABgZ5YbAAAAAAAAAIIAAAAVcGVybWl0LVgxMS1mb3J3YXJkaW5nAAAAAAAAABdwZXJtaXQtYWdlbnQtZm9yd2FyZGluZwAAAAAAAAAWcGVybWl0LXBvcnQtZm9yd2FyZGluZwAAAAAAAAAKcGVybWl0LXB0eQAAAAAAAAAOcGVybWl0LXVzZXItcmMAAAAAAAAAAAAAADMAAAALc3NoLWVkMjU1MTkAAAAgRHCZBBjkuP8wEP0q/lNmSk6Uy1iPY0hhY2c6WfX80Q8AAABTAAAAC3NzaC1lZDI1NTE5AAAAQFCx2ANDihO+5S4qu9voJkONBtplFB8zuajzVVw1CtZsY5q7CTMsrto9qws5TMlC++whbCQG2IZjW2xfTNJHRwI= SSH CA on shaka.sdsc.edu@20210402-145251
+
+
+
+./gettoken.py https://auth.globus.org/scopes/3f8626f3-a43a-45a1-8408-46ff1e7662ab/shaka
+
+AgB1d0MeM52mDOa6je015O2QBJeEYkameO0QVWJozgdpBaK1EDHyCdVMreg60Elqrdy2NzMEPMX7DSkmxOn3CxGKO
+
+$ echo 'AgB1d0MeM52mDOa6je015O2QBJeEYkameO0QVWJozgdpBaK1EDHyCdVMreg60Elqrdy2NzMEPMX7DSkmxOn3CxGKO' | ssh -i ~/.ssh/jupyterdev_rsa sshca-idp-globus@shaka.sdsc.edu 
+
+(base) [ux455215@comet-ln2 ~]$ echo 'AgB1d0MeM52mDOa6je015O2QBJeEYkameO0QVWJozgdpBaK1EDHyCdVMreg60Elqrdy2NzMEPMX7DSkmxOn3CxGKO' | ssh -i ~/.ssh/jupyterdev_rsa sshca-idp-globus@shaka.sdsc.edu 
+Pseudo-terminal will not be allocated because stdin is not a terminal.
+Token: 
+-----BEGIN OPENSSH PRIVATE KEY-----
+b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAAMwAAAAtzc2gtZW
+QyNTUxOQAAACD7/qiNzJMX/gG6bKCYklOwsK1H9o8yeF6jbi7/3q8HtQAAALCuG9WxrhvV
+sQAAAAtzc2gtZWQyNTUxOQAAACD7/qiNzJMX/gG6bKCYklOwsK1H9o8yeF6jbi7/3q8HtQ
+AAAEDuE4Ru/zfnSasNbR4z4+/9cID0a7iek481EAOaK1EsGPv+qI3Mkxf+AbpsoJiSU7Cw
+rUf2jzJ4XqNuLv/erwe1AAAAKFNTSCBDQSBvbiBzaGFrYS5zZHNjLmVkdUAyMDIxMDMzMC
+0yMDA0MDcBAgMEBQ==
+-----END OPENSSH PRIVATE KEY-----
+ssh-ed25519-cert-v01@openssh.com AAAAIHNzaC1lZDI1NTE5LWNlcnQtdjAxQG9wZW5zc2guY29tAAAAIJHItLB3H6ltNksKG9I+vh5gqysjoKCaU1yiYI6sAqljAAAAIPv+qI3Mkxf+AbpsoJiSU7CwrUf2jzJ4XqNuLv/erwe1AAAAAAAAAAAAAAABAAAAGFNTSCBDQSBvbiBzaGFrYS5zZHNjLmVkdQAAAAwAAAAIdXg0NTUyMTUAAAAAYGPmZAAAAABgY+qPAAAAAAAAAIIAAAAVcGVybWl0LVgxMS1mb3J3YXJkaW5nAAAAAAAAABdwZXJtaXQtYWdlbnQtZm9yd2FyZGluZwAAAAAAAAAWcGVybWl0LXBvcnQtZm9yd2FyZGluZwAAAAAAAAAKcGVybWl0LXB0eQAAAAAAAAAOcGVybWl0LXVzZXItcmMAAAAAAAAAAAAAADMAAAALc3NoLWVkMjU1MTkAAAAgRHCZBBjkuP8wEP0q/lNmSk6Uy1iPY0hhY2c6WfX80Q8AAABTAAAAC3NzaC1lZDI1NTE5AAAAQJw0LFt0zvT/MEEB8UMKAYbXuUnGdMtkhJFLRIr6FcIXdzbZPbZPo6kQCXXrFA3K52RsiYqghpoxpKDAv/jOhwc= SSH CA on shaka.sdsc.edu@20210330-200407
