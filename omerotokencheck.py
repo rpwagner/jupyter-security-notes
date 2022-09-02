@@ -41,7 +41,7 @@ IDENTITY_PROVIDER = 'ucsd.edu'
 # Simulate the list of accepted usernames
 PROPERTIES = ['rpwagner', 'wcwest', 'bay001']
 
-def doCheckPassword(omero_username, token):
+def checkPassword(omero_username, token):
     # Calls the Globus RFC 7662 OAuth 2.0 Token Introspection URL
     # Returns True if
     #  - the omero_username is in the list of allowed users
@@ -79,7 +79,7 @@ if __name__ == '__main__':
         sys.exit(1)
     exit_code = 0
     try:
-        tf = doCheckPassword(sys.argv[1], sys.argv[2])
+        tf = checkPassword(sys.argv[1], sys.argv[2])
         if tf:
             print('valid user')
         else:
